@@ -32,6 +32,9 @@ export class Post{
     @DeleteDateColumn({nullable: true})
     date_deleted: Date;
 
+    @Column({name: 'user_id', nullable: true})
+    userId: number;
+
     @ManyToOne(() => User, (user) => user.posts, {eager: true})
     @JoinColumn({name: 'user_id'})
     user: User;
@@ -39,6 +42,9 @@ export class Post{
     @ManyToOne(() => Category, (category) => category.posts, {eager: true})
     @JoinColumn({name: 'category_id'})
     category: Category;
+
+    @Column({name: 'reply_id', nullable: true})
+    replyId: number;
 
     @ManyToOne(() => Post, post => post.parent_posts)
     @JoinColumn({name: 'reply_id'})

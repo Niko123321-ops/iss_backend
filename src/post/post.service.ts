@@ -18,9 +18,16 @@ export class PostService {
         return this.postRepository.save(data);
     }
 
+    findPosts(): Promise<Post[]>{
+        return this.postRepository.find({where: {replyId: null}, order: {date_created: "DESC"}});
+    }
 
-    findOne(id: number): Promise<Post> {
-        return this.postRepository.findOne(id);
+    findReplies(id: number): Promise<Post[]>{
+        return this.postRepository.find({where: {replyId: id}, order: {date_created: "ASC"}});
+    }
+
+    async findOne(id: number): Promise<Post> {
+        return await this.postRepository.findOne(id);
     }
 
     async update(id:number,data): Promise<Post> {

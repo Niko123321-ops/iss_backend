@@ -20,6 +20,7 @@ import { FileInterceptor} from '@nestjs/platform-express';
 import {diskStorage} from 'multer';
 import {extname} from 'path';
 import {ReplyPostDto} from "./reply_post.dto";
+import {UpdatePostDto} from "./update_post.dto";
 
 @UseGuards(AuthGuard)
 @Controller('post')
@@ -33,6 +34,11 @@ export class PostController {
     @Get()
     getAll () {
         return this.postService.getAll();
+    }
+
+    @Get('posts')
+    getPosts(){
+        return this.postService.findPosts();
     }
 
     @Post('create')
@@ -67,6 +73,24 @@ export class PostController {
         });
     }
 
+    @Put('update/:id')
+    async update(
+        @Body() data: UpdatePostDto,
+        @Param('id') id:number,
+        @Req() request: Request
+    ){
+        const jwt = request.cookies['jwt'];
+        const user = await this.jwtService.verifyAsync(jwt);
+
+        return this.postService.update(
+            id,
+            {
+                title: data.title,
+                content: data.content
+            }
+        );
+    }
+
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
@@ -84,6 +108,11 @@ export class PostController {
     @Get(':id')
     getOne(@Param('id') id:number) {
         return this.postService.findOne(id);
+    }
+
+    @Get('replies/:id')
+    getReplies(@Param('id') id:number){
+        return this.postService.findReplies(id);
     }
 
     @Delete(':id')
