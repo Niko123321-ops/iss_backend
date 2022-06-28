@@ -22,7 +22,7 @@ import {extname} from 'path';
 import {ReplyPostDto} from "./reply_post.dto";
 import {UpdatePostDto} from "./update_post.dto";
 
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller('post')
 export class PostController {
 
@@ -41,6 +41,7 @@ export class PostController {
         return this.postService.findPosts();
     }
 
+    @UseGuards(AuthGuard)
     @Post('create')
     async create (
         @Body() data: CreatePostDto,
@@ -57,6 +58,7 @@ export class PostController {
         });
     }
 
+    @UseGuards(AuthGuard)
     @Post('reply')
     async reply (
         @Body() data: ReplyPostDto,
@@ -73,6 +75,7 @@ export class PostController {
         });
     }
 
+    @UseGuards(AuthGuard)
     @Put('update/:id')
     async update(
         @Body() data: UpdatePostDto,
@@ -91,6 +94,7 @@ export class PostController {
         );
     }
 
+    @UseGuards(AuthGuard)
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
@@ -115,6 +119,7 @@ export class PostController {
         return this.postService.findReplies(id);
     }
 
+    @UseGuards(AuthGuard)
     @Delete(':id')
     async delete (
         @Param('id') id:number,
